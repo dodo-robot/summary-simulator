@@ -2,7 +2,7 @@
 
 from transformers import AutoTokenizer
 from simulator.summarizer.longformer_encoder_decoder import LongformerEncoderDecoderForConditionalGeneration
-
+from typing import List
 import torch
 
 class BARTSummarizer():
