@@ -16,14 +16,18 @@ class BARTSummarizer():
         self.model.model.encoder.config.gradient_checkpointing = True
         self.model.model.decoder.config.gradient_checkpointing = True
         print('Successfully started the model')
-   
-    def summarize(self, txt: list):
-        final_summary = ""
-        data = self.tokenizer(txt, max_length=4096, return_tensors='pt', 
-                              padding="max_length", truncation=True).to(self.device)
-        input_ids = data['input_ids']
-        attention_mask = data['attention_mask']
-        sample_outputs = self.model.generate(input_ids,
+        
+        
+    def beam_summary(self, input_ids):
+        return self.model.generate(text_input_ids, do_sample = False, 
+                                   temperature=0.7, num_beams=int(3), 
+                                   length_penalty=float(2), max_length = int(150), 
+                                   min_length=int(50), no_repeat_ngram_size=int(3))
+
+        
+        
+    def sample_summary(self, input_ids):
+        return  self.model.generate(input_ids,
                                             do_sample=True, 
                                             min_length=0,
                                             max_length=200,
@@ -33,6 +37,17 @@ class BARTSummarizer():
                                             repetition_penalty=2.0,
                                             num_return_sequences=1,
                                             )
+        
+    def summarize(self, txt: list, _type: str):
+        final_summary = ""
+        data = self.tokenizer(txt, max_length=4096, return_tensors='pt', 
+                              padding="max_length", truncation=True).to(self.device)
+        input_ids = data['input_ids']
+        attention_mask = data['attention_mask']
+        if _type=='sample':
+            sample_outputs = self.sample_summary(input_ids)
+        else:
+            sample_outputs = self.beam_summary(input_ids)
         
         for i, sample_output in enumerate(sample_outputs):
             summary = self.tokenizer.decode(sample_output, skip_special_tokens=True)
