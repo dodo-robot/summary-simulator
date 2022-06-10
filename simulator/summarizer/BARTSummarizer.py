@@ -27,7 +27,7 @@ class BARTSummarizer():
     #   no_repeat_ngram_size: int(3)  
     # }
     def beam_summary(self, input_ids, **args):
-        return self.model.generate(text_input_ids, do_sample = False, 
+        return self.model.generate(input_ids, do_sample = False, 
                                    temperature=args['temperature'], num_beams=args['num_beams'],
                                    length_penalty=args['length_penalty'], max_length = args['max_length'],
                                    min_length=args['min_length'], no_repeat_ngram_size=args['no_repeat_ngram_size'])
@@ -54,16 +54,16 @@ class BARTSummarizer():
                             num_return_sequences=args['num_return_sequences'],
                             )
         
-    def summarize(self, txt: list, _type: str):
+    def summarize(self, txt: list, **args):
         final_summary = ""
         data = self.tokenizer(txt, max_length=4096, return_tensors='pt', 
                               padding="max_length", truncation=True).to(self.device)
         input_ids = data['input_ids']
         attention_mask = data['attention_mask']
-        if _type=='sample':
-            sample_outputs = self.sample_summary(input_ids)
+        if args['tipo']=='sample':
+            sample_outputs = self.sample_summary(input_ids, args)
         else:
-            sample_outputs = self.beam_summary(input_ids)
+            sample_outputs = self.beam_summary(input_ids, args)
         
         for i, sample_output in enumerate(sample_outputs):
             summary = self.tokenizer.decode(sample_output, skip_special_tokens=True)
