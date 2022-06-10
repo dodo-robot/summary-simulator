@@ -5,7 +5,7 @@ import copy
 
 from transformers import AutoTokenizer, MBartTokenizer, MBartForConditionalGeneration
 # from transformers.models.bart.modeling_bart import shift_tokens_right
-from longformer_encoder_decoder import LongformerEncoderDecoderForConditionalGeneration, LongformerSelfAttentionForMBart, LongformerEncoderDecoderConfig
+from simulator.summarizer.longformer_encoder_decoder import LongformerEncoderDecoderForConditionalGeneration, LongformerSelfAttentionForMBart, LongformerEncoderDecoderConfig
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)

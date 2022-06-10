@@ -1,7 +1,7 @@
 # Class to call for generating summaries
 
 from transformers import AutoTokenizer
-from longformer_encoder_decoder import LongformerEncoderDecoderForConditionalGeneration
+from simulator.summarizer.longformer_encoder_decoder import LongformerEncoderDecoderForConditionalGeneration
 
 import torch
 
@@ -17,9 +17,9 @@ class BARTSummarizer():
         self.model.model.decoder.config.gradient_checkpointing = True
         print('Successfully started the model')
    
-    def summarize(self, txt):
+    def summarize(self, txt: list):
         final_summary = ""
-        data = self.tokenizer([txt], max_length=4096, return_tensors='pt', 
+        data = self.tokenizer(txt, max_length=4096, return_tensors='pt', 
                               padding="max_length", truncation=True).to(self.device)
         input_ids = data['input_ids']
         attention_mask = data['attention_mask']
