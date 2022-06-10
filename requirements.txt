@@ -1,0 +1,10 @@
+requests
+bs4
+lxml
+newspaper3k
+loguru
+tldextract
+transformers
+torch
+pandas
+numpy
