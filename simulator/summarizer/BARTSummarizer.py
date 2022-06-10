@@ -17,10 +17,10 @@ class BARTSummarizer():
         self.model.model.decoder.config.gradient_checkpointing = True
         print('Successfully started the model')
    
-    def summarize(txt):
+    def summarize(self, txt):
         final_summary = ""
         data = self.tokenizer([txt], max_length=4096, return_tensors='pt', 
-                              padding="max_length", truncation=True).to(device)
+                              padding="max_length", truncation=True).to(self.device)
         input_ids = data['input_ids']
         attention_mask = data['attention_mask']
         sample_outputs = self.model.generate(input_ids,
@@ -36,7 +36,7 @@ class BARTSummarizer():
         
         print("Output:\n" + 100 * '-')
         for i, sample_output in enumerate(sample_outputs):
-            summary = tokenizer.decode(sample_output, skip_special_tokens=True)
+            summary = self.tokenizer.decode(sample_output, skip_special_tokens=True)
             final_summary += summary+"\n"
             print("{}: {}".format(i, summary))
 
