@@ -34,11 +34,9 @@ class BARTSummarizer():
                                             num_return_sequences=1,
                                             )
         
-        print("Output:\n" + 100 * '-')
         for i, sample_output in enumerate(sample_outputs):
             summary = self.tokenizer.decode(sample_output, skip_special_tokens=True)
             final_summary += summary+"\n"
-            print("{}: {}".format(i, summary))
 
         return final_summary 
 
