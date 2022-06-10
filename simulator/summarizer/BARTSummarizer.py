@@ -20,9 +20,9 @@ class BARTSummarizer():
         
     def beam_summary(self, input_ids):
         return self.model.generate(text_input_ids, do_sample = False, 
-                                   temperature=0.7, num_beams=int(3), 
-                                   length_penalty=float(2), max_length = int(150), 
-                                   min_length=int(50), no_repeat_ngram_size=int(3))
+                                   temperature=0.85, num_beams=int(3), 
+                                   length_penalty=float(2), max_length = int(200), 
+                                   min_length=int(0), no_repeat_ngram_size=int(3))
 
         
         
