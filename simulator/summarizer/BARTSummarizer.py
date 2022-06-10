@@ -17,26 +17,42 @@ class BARTSummarizer():
         self.model.model.decoder.config.gradient_checkpointing = True
         print('Successfully started the model')
         
-        
-    def beam_summary(self, input_ids):
+    
+    # {
+    #   temperature: 0.85, 
+    #   num_beams: int(3),
+    #   length_penalty: float(2), 
+    #   max_length: int(200), 
+    #   min_length: int(0), 
+    #   no_repeat_ngram_size: int(3)  
+    # }
+    def beam_summary(self, input_ids, **args):
         return self.model.generate(text_input_ids, do_sample = False, 
-                                   temperature=0.85, num_beams=int(3), 
-                                   length_penalty=float(2), max_length = int(200), 
-                                   min_length=int(0), no_repeat_ngram_size=int(3))
+                                   temperature=args['temperature'], num_beams=args['num_beams'],
+                                   length_penalty=args['length_penalty'], max_length = args['max_length'],
+                                   min_length=args['min_length'], no_repeat_ngram_size=args['no_repeat_ngram_size'])
 
         
-        
-    def sample_summary(self, input_ids):
+    # {
+    # min_length: 0,
+    # max_length: 200,
+    # top_k: 50, 
+    # top_p: 0.95, 
+    # length_penalty: float(2),
+    # repetition_penalty: 2.0,
+    # num_return_sequences: 1,
+    # }
+    def sample_summary(self, input_ids, **args):
         return  self.model.generate(input_ids,
-                                            do_sample=True, 
-                                            min_length=0,
-                                            max_length=200,
-                                            top_k=50, 
-                                            top_p=0.95, 
-                                            length_penalty=float(2),
-                                            repetition_penalty=2.0,
-                                            num_return_sequences=1,
-                                            )
+                            do_sample=True, 
+                            min_length=args['min_length'],
+                            max_length=args['max_length'],
+                            top_k=args['top_k'],
+                            top_p=args['top_p'],
+                            length_penalty=args['length_penalty'],
+                            repetition_penalty=args['repetition_penalty'],
+                            num_return_sequences=args['num_return_sequences'],
+                            )
         
     def summarize(self, txt: list, _type: str):
         final_summary = ""
